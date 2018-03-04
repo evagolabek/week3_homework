@@ -69,5 +69,26 @@ app.put('/events/:id', (request, response) => {
         error
       })
     })
+})
+
+
+app.delete('/events/:id', (request, response) => {
+  const eventId = Number(request.params.id)
+
+ Event.findById(request.params.id)
+    .then(event => {
+      return event.destroy()
+    })
+    .then(_ => {
+      response.send({
+        message: 'The event was deleted succesfully'
+      })
+    })
+    .catch(error => {
+      response.status(500).send({
+        message: `Something went wrong`,
+        error
+      })
+    })
 
 })
