@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
 
+
 var Sequelize = require('sequelize')
 var sequelize = new Sequelize('postgres://localhost:5432/postgres')
-
+const Op = Sequelize.Op
 
 app.listen(4001, () => console.log('Express API listening on port 4001'))
 
@@ -25,17 +26,14 @@ app.get('/events/:id', (request, response) => {
   })
 })
 
-// app.get('/events', (request, response) => {
-//   Event.findAll({
-//     attributes: ['title', 'start_date', 'end_date']})
-//     .then(events => {
-//     response.send({ events })
-//   })
-// })
-
 app.get('/events', (request, response) => {
   Event.findAll({
-    attributes: ['title', 'start_date', 'end_date']})
+    attributes: ['title', 'start_date', 'end_date'],
+    where: {
+      start_date: {
+        [Op.gte]: Date.now()
+      }
+    }})
     .then(events => {
     response.send({ events })
   })
